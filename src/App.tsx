@@ -15,7 +15,7 @@ function App() {
             <Nav></Nav>
           </GridItem>
           <Stack hideBelow={"md"}>
-              <GridItem area="aside" paddingX={5}><GenreList onSelectGenre={(genreName:string) => setSelectedGenre(genreName)}/></GridItem>
+              <GridItem area="aside" paddingX={5}><GenreList selectedGenre={selectedGenre} onSelectGenre={(genreName:string) => setSelectedGenre(genreName)}/></GridItem>
           </Stack>
          
           <GridItem area="main"><GameGrid selectedGenre={selectedGenre}/></GridItem>
