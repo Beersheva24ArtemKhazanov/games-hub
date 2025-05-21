@@ -9,7 +9,3 @@ export interface Game {
     parent_platforms: Platform[];
     metacritic: number;
 }
-
-export interface GamesResponse {
-    results: Game[];
-}
