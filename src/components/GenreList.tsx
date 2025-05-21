@@ -21,7 +21,7 @@ const GenreList: FC<Props> = ({ onSelectGenre }) => {
                     <Avatar.Fallback name={g.name} />
                     <Avatar.Image src={g.image_background} />
                   </Avatar.Root>
-                  <Button variant={"outline"} borderWidth="0" onClick={onSelectGenre.bind(undefined, g.name)}>{g.name}</Button>
+                  <Button variant={"outline"} borderWidth="0" onClick={() => onSelectGenre(g.slug)}>{g.name}</Button>
                 </HStack>
               </List.Item>
             ))}
