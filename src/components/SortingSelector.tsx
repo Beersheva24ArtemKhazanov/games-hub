@@ -1,74 +1,58 @@
-import { Menu, Button, Portal } from '@chakra-ui/react';
-import React, { useState, type FC } from 'react'
-import ComponentMotion from './ComponentMotion';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { easeOut } from 'framer-motion';
-
-const orderingAr = ['name', 'released', 'added', 'created', 'updated', 'rating', "metacritic"]
-
-const duration = 0.5;
-
+import { Menu, Button, Portal } from "@chakra-ui/react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { type FC, useState } from "react";
+import {easeOut} from 'framer-motion';
+import ComponentMotion from "./ComponentMotion";
+import sortOptions from "../../config/sort-config.json"
+export type SortOption = typeof sortOptions[0]
 interface Props {
-    onSelectSorter: (sorter: string | null) => void;
-    selectedSorter: string | null
+  selectedOrdering: SortOption | null;
+  onSelectOrdering: (platform: SortOption | null) => void;
 }
+const duration=0.5;
 
-
-const SortingSelector: FC<Props> = ({
-    selectedSorter,
-    onSelectSorter
-}) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const isDesc = selectedSorter?.startsWith('-');
-    const selectedKey = isDesc ? selectedSorter?.slice(1) : selectedSorter;
-
-    function toggleMinus(item: string) {
-    return item.startsWith('-') ? item.slice(1) : `-${item}`;
-}
-
-    return (
-        <Menu.Root>
+const SortingSelector: FC<Props> = ({ onSelectOrdering, selectedOrdering}) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return (
+    <>
+          <Menu.Root onExitComplete={() => setIsOpen(false)}>
             <Menu.Trigger asChild>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    borderWidth={0}
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    {selectedSorter
-                        ? `${selectedKey} ${isDesc ? '▼' : '▲'}`
-                        : "Order By"}
-                    {isOpen ? <ComponentMotion duration={duration} timing={easeOut}>
-                        <FaChevronUp />
-                    </ComponentMotion> : <FaChevronDown />}
-                </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                borderWidth={0}
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                {` Order by ${selectedOrdering?.displayName || "Relevance"}`}
+                {isOpen ? <ComponentMotion duration={duration} timing={easeOut}>
+                    <FaChevronUp />
+               </ComponentMotion> : <FaChevronDown></FaChevronDown>}
+              </Button>
             </Menu.Trigger>
             <Portal>
-                <Menu.Positioner>
-                    <ComponentMotion duration={duration} timing={easeOut}>
-                        <Menu.Content>
-                            {orderingAr.map((item) => {
-                                const isSelected = selectedKey === item;
-                                return <Menu.Item
-                                    key={item}
-                                    onClick={() => {
-                                        if (isSelected) {
-                                                onSelectSorter(toggleMinus(selectedSorter!));
-                                            } else {
-                                                onSelectSorter(item);
-                                            }
-                                        setIsOpen(false);
-                                    }}
-                                    value={item}>
-                                    {item}
-                                </Menu.Item>
-                            })}
-                        </Menu.Content>
-                    </ComponentMotion>
-                </Menu.Positioner>
+              <Menu.Positioner>
+                <ComponentMotion duration={duration} timing={easeOut}>
+                    <Menu.Content>
+                      {sortOptions.map((option) => (
+                        <Menu.Item
+                          key={option.value}
+                          onClick={() => {
+                            onSelectOrdering(option);
+                            setIsOpen(false);
+                          }}
+                          value={option.value}
+                        >
+                          {option.displayName}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Content>
+                </ComponentMotion>
+              </Menu.Positioner>
             </Portal>
-        </Menu.Root>
-    )
-}
+          </Menu.Root>
+     
+    </>
+  );
+};
 
-export default SortingSelector
+export default SortingSelector;
