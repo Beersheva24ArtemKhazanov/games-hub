@@ -5,6 +5,7 @@ import GanreList from "./components/GenreList";
 import { useState } from "react";
 import PlatformSelector from "./components/PlatformSelector";
 import type GameQuery from "./model/GameQuery";
+import SortingSelector from "./components/SortingSelector";
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
@@ -16,7 +17,7 @@ function App() {
       }}
     >
       <GridItem area="nav">
-        <Nav></Nav>
+        <Nav searchSubmitter={(text) => setGameQuery({...gameQuery, search: text})}></Nav>
       </GridItem>
       <Stack hideBelow={"md"}>
         <GridItem area="aside" paddingX={5}>
@@ -36,6 +37,10 @@ function App() {
           }
           selectedPlatform={gameQuery.platform}
         ></PlatformSelector>
+        <SortingSelector onSelectSorter={(ordering) => 
+          setGameQuery({ ...gameQuery, ordering})}
+          selectedSorter={gameQuery.ordering}
+        ></SortingSelector>
         <GameGrid gameQuery={gameQuery} />
       </GridItem>
     </Grid>
